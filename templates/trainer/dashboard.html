@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Trainer Dashboard - ATAMS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Trainer Dashboard</h1>
+        <p class="text-army-light mt-2">Manage soldiers and fitness records</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Stats -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="text-2xl font-bold text-army-gold">25</div>
+                <div class="text-army-light">Assigned Soldiers</div>
+            </div>
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="text-2xl font-bold text-army-gold">150</div>
+                <div class="text-army-light">Fitness Records</div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="lg:col-span-2 bg-army-olive rounded-xl p-6 border border-army-drab">
+            <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                    Add Fitness Record
+                </a>
+                <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                    View Soldiers
+                </a>
+                <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                    Generate Reports
+                </a>
+                <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                    Performance Analytics
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

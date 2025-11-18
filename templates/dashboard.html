@@ -1,0 +1,290 @@
+ {% extends 'base.html' %}
+ {% load static %}
+{% comment %} {% extends 'base.html' %} {% block title %}Dashboard - ATAMS{%
+endblock %} {% block content %}
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white">Dashboard</h1>
+    <p class="text-army-light mt-2">
+      Welcome, {{ user.first_name|default:user.username }}! Role: {{
+      user.role|default:"Not assigned" }}
+    </p>
+  </div>
+
+  <!-- Debug Info (remove in production) -->
+  <div class="bg-yellow-900 border border-yellow-700 rounded-lg p-4 mb-6">
+    <h3 class="text-yellow-300 font-bold mb-2">Debug Information:</h3>
+    <p class="text-yellow-200 text-sm">Username: {{ user.username }}</p>
+    <p class="text-yellow-200 text-sm">
+      Role: {{ user.role|default:"No role attribute" }}
+    </p>
+    <p class="text-yellow-200 text-sm">
+      Email: {{ user.email|default:"No email" }}
+    </p>
+  </div>
+
+  <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+    <h2 class="text-xl font-semibold text-white mb-4">System Overview</h2>
+    <p class="text-army-light">
+      This is a generic dashboard. Your role-specific dashboard should load
+      automatically.
+    </p>
+
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <a
+        href="/admin/"
+        class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors"
+      >
+        Admin Panel
+      </a>
+      <a
+        href="/api/v1/"
+        class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors"
+      >
+        API Documentation
+      </a>
+      <a
+        href="{% url 'logout' %}"
+        class="bg-red-600 text-white p-4 rounded-lg text-center hover:bg-red-700 transition-colors"
+      >
+        Logout
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+{%block title %}Trainer Dashboard - ATAMS{% endblock %}
+{% block content %}
+<div class="p-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white">Trainer Dashboard</h1>
+    <p class="text-army-light mt-2">Manage soldiers and fitness performance</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+    <div
+      class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover"
+    >
+      <div class="text-center">
+        <div class="text-2xl font-bold text-army-gold">
+          {{ analytics.total_soldiers }}
+        </div>
+        <div class="text-army-light">Assigned Soldiers</div>
+      </div>
+    </div>
+
+    <div
+      class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover"
+    >
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-400">
+          {{ analytics.total_records }}
+        </div>
+        <div class="text-army-light">Total Records</div>
+      </div>
+    </div>
+
+    <div
+      class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover"
+    >
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-400">
+          {{ analytics.avg_pushups }}
+        </div>
+        <div class="text-army-light">Avg Pushups</div>
+      </div>
+    </div>
+
+    <div
+      class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover"
+    >
+      <div class="text-center">
+        <div class="text-2xl font-bold text-yellow-400">
+          {{ analytics.avg_running }}km
+        </div>
+        <div class="text-army-light">Avg Running</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Overview -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Performance Distribution -->
+    <div
+      class="lg:col-span-2 bg-army-olive rounded-xl p-6 border border-army-drab"
+    >
+      <h2 class="text-xl font-semibold text-white mb-4">
+        Performance Distribution
+      </h2>
+      <div class="h-64">
+        <canvas id="performanceChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Top Performers -->
+    <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+      <h2 class="text-xl font-semibold text-white mb-4">Top Performers</h2>
+      <div class="space-y-3">
+        {% for soldier in analytics.top_performers|slice:":3" %}
+        <div
+          class="flex items-center justify-between p-3 bg-army-dark rounded-lg"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-8 h-8 bg-army-gold rounded-full flex items-center justify-center"
+            >
+              <span class="text-army-dark font-bold text-xs">
+                {{ soldier.user.first_name|first|upper }}{{
+                soldier.user.last_name|first|upper }}
+              </span>
+            </div>
+            <div>
+              <div class="text-white text-sm font-semibold">
+                {{ soldier.user.first_name }}
+              </div>
+              <div class="text-army-light text-xs">
+                {{ soldier.soldier_id }}
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-army-gold font-bold">
+              {{ soldier.avg_pushups|default:0|floatformat:0 }}
+            </div>
+            <div class="text-army-light text-xs">pushups</div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-army-light py-4">
+          No performance data yet
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity & Quick Actions -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Activity -->
+    <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+      <h2 class="text-xl font-semibold text-white mb-4">Recent Activity</h2>
+      <div class="space-y-3">
+        <div
+          class="flex justify-between items-center p-3 bg-army-dark rounded-lg"
+        >
+          <div class="flex items-center space-x-3">
+            <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+            <span class="text-army-light">Records This Week</span>
+          </div>
+          <span class="text-army-gold font-semibold"
+            >{{ analytics.recent_records }}</span
+          >
+        </div>
+        <div
+          class="flex justify-between items-center p-3 bg-army-dark rounded-lg"
+        >
+          <div class="flex items-center space-x-3">
+            <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+            <span class="text-army-light">Average Accuracy</span>
+          </div>
+          <span class="text-army-gold font-semibold"
+            >{{ analytics.avg_accuracy }}%</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+      <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+      <div class="grid grid-cols-1 gap-4">
+        <a
+          href="{% url 'soldier_management' %}"
+          class="bg-army-green text-white p-3 rounded-lg text-center hover:bg-army-drab transition-colors"
+        >
+          Manage Soldiers
+        </a>
+        <a
+          href="{% url 'create_fitness_record' %}"
+          class="bg-army-green text-white p-3 rounded-lg text-center hover:bg-army-drab transition-colors"
+        >
+          Add Fitness Record
+        </a>
+        <a
+          href="{% url 'fitness_records' %}"
+          class="bg-army-green text-white p-3 rounded-lg text-center hover:bg-army-drab transition-colors"
+        >
+          View All Records
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // Performance Distribution Chart
+      const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+
+      // Prepare performance data
+      const performanceData = {
+          'Excellent': {{ analytics.performance_distribution.Excellent|default:0 }},
+          'Good': {{ analytics.performance_distribution.Good|default:0 }},
+          'Average': {{ analytics.performance_distribution.Average|default:0 }},
+          'Needs Improvement': {{ analytics.performance_distribution.Needs_Improvement|default:0 }}
+      };
+
+      new Chart(performanceCtx, {
+          type: 'bar',
+          data: {
+              labels: Object.keys(performanceData),
+              datasets: [{
+                  label: 'Soldiers',
+                  data: Object.values(performanceData),
+                  backgroundColor: [
+                      '#10B981', // Excellent - Green
+                      '#3B82F6', // Good - Blue
+                      '#F59E0B', // Average - Yellow
+                      '#EF4444'  // Needs Improvement - Red
+                  ],
+                  borderColor: '#1B2E1F',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: false
+                  }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      ticks: {
+                          color: '#E6E6E6'
+                      },
+                      grid: {
+                          color: '#283B2E'
+                      }
+                  },
+                  x: {
+                      ticks: {
+                          color: '#E6E6E6'
+                      },
+                      grid: {
+                          display: false
+                      }
+                  }
+              }
+          }
+      });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="{% url 'soldier_management' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Back to Soldier Management</span>
+            </a>
+            <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
+            <p class="text-army-light mt-2">Fill in the soldier details below</p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Personal Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.first_name.id_for_label }}">
+                            First Name *
+                        </label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.first_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.last_name.id_for_label }}">
+                            Last Name *
+                        </label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.last_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.email.id_for_label }}">
+                            Email Address *
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.phone.id_for_label }}">
+                            Phone Number
+                        </label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.phone.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Military Information -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.soldier_id.id_for_label }}">
+                            Soldier ID *
+                        </label>
+                        {{ form.soldier_id }}
+                        {% if form.soldier_id.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.soldier_id.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.rank.id_for_label }}">
+                            Rank *
+                        </label>
+                        {{ form.rank }}
+                        {% if form.rank.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.rank.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.joining_date.id_for_label }}">
+                            Joining Date *
+                        </label>
+                        {{ form.joining_date }}
+                        {% if form.joining_date.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.joining_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Unit and Trainer -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.unit.id_for_label }}">
+                            Unit *
+                        </label>
+                        {{ form.unit }}
+                        {% if form.unit.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.unit.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.assigned_trainer.id_for_label }}">
+                            Assigned Trainer *
+                        </label>
+                        {{ form.assigned_trainer }}
+                        {% if form.assigned_trainer.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.assigned_trainer.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-army-drab">
+                    <a href="{% url 'soldier_management' %}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="bg-army-gold text-army-dark px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                        {{ submit_text }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Info Box for Create Form -->
+        {% if not soldier %}
+        <div class="mt-6 bg-blue-900 border border-blue-700 rounded-xl p-4">
+            <div class="flex items-start space-x-3">
+                <svg class="w-5 h-5 text-blue-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="text-blue-200 text-sm">
+                    <strong>Note:</strong> A new user account will be created automatically with the default password <code class="bg-blue-800 px-1 rounded">soldier123</code>. 
+                    The soldier will be able to login using their Soldier ID as username.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+/* Custom styling for form elements */
+.input, .select {
+    background-color: #283B2E !important;
+    border-color: #6B8E23 !important;
+    color: #E6E6E6 !important;
+}
+
+.input:focus, .select:focus {
+    border-color: #D4AF37 !important;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+}
+</style>
+{% endblock %}

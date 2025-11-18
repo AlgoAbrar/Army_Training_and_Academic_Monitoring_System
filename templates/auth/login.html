@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - ATAMS{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-army-dark py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <div class="flex justify-center">
+                <div class="bg-army-gold rounded-full p-3">
+                    <svg class="h-8 w-8 text-army-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
+                Sign in to ATAMS
+            </h2>
+            <p class="mt-2 text-center text-sm text-army-light">
+                Army Training & Academic Monitoring System
+            </p>
+        </div>
+
+        {% if form.errors %}
+        <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
+            <strong class="font-bold">Error: </strong>
+            <span class="block sm:inline">Invalid username or password.</span>
+        </div>
+        {% endif %}
+
+        <form class="mt-8 space-y-6" method="POST">
+            {% csrf_token %}
+            
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="username" class="sr-only">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-army-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <input
+                            id="username"
+                            name="username"
+                            type="text"
+                            required
+                            class="appearance-none rounded-t-lg relative block w-full pl-10 pr-3 py-3 border border-army-drab bg-army-olive text-white placeholder-army-light focus:outline-none focus:ring-army-gold focus:border-army-gold focus:z-10"
+                            placeholder="Username"
+                            value="{{ form.username.value|default:'' }}"
+                        >
+                    </div>
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-army-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="appearance-none rounded-b-lg relative block w-full pl-10 pr-3 py-3 border border-army-drab bg-army-olive text-white placeholder-army-light focus:outline-none focus:ring-army-gold focus:border-army-gold focus:z-10"
+                            placeholder="Password"
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button
+                    type="submit"
+                    class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-army-dark bg-army-gold hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-army-gold transition-colors"
+                >
+                    Sign in
+                </button>
+            </div>
+
+            <div class="text-center">
+                <a
+                    href="{% url 'home' %}"
+                    class="font-medium text-army-gold hover:text-yellow-500 transition-colors"
+                >
+                    ← Back to Homepage
+                </a>
+            </div>
+        </form>
+
+        <!-- Demo Credentials -->
+        <div class="mt-8 p-4 bg-army-olive rounded-lg border border-army-drab">
+            <h3 class="text-sm font-medium text-army-gold mb-2">Demo Credentials:</h3>
+            <div class="text-xs text-army-light space-y-1">
+                <div><strong>Admin:</strong> admin / admin123</div>
+                <div><strong>Trainer:</strong> trainer_ahmed / trainer123</div>
+                <div><strong>Teacher:</strong> teacher_fatima / teacher123</div>
+                <div><strong>Soldier:</strong> soldier_rifat / soldier123</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

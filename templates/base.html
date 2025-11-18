@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="army">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bangladesh Army ATAMS{% endblock %}</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        army: {
+                            dark: "#1B2E1F",
+                            olive: "#283B2E", 
+                            green: "#4B5320",
+                            drab: "#6B8E23",
+                            gold: "#D4AF37",
+                            light: "#8F9779",
+                            text: "#E6E6E6",
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .army-gradient {
+            background: linear-gradient(135deg, #1B2E1F 0%, #283B2E 50%, #4B5320 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-army-dark text-army-text">
+    <!-- Navigation -->
+    <nav class="bg-army-olive border-b border-army-drab">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="http://127.0.0.1:8000/">
+                    <svg class="h-8 w-8 text-army-gold mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                    <span class="text-xl font-bold text-white">
+                        বাংলাদেশ সেনাবাহিনী
+                    </span>
+                    <span class="ml-2 text-army-gold">ATAMS</span>
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-army-gold">Welcome, {{ user.first_name|default:user.username }}</span>
+                        <span class="bg-army-green px-3 py-1 rounded-full text-sm text-white">
+                            {{ user.role|title }}
+                        </span>
+                        <a href="{% url 'logout' %}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                            Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="bg-army-gold text-army-dark px-6 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                            Login
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} mb-4">
+            <div class="flex-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-6 h-6 mx-2 stroke-current"> 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>                         
+                </svg> 
+                <label>{{ message }}</label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content with Sidebar -->
+    <div class="flex">
+        {% if user.is_authenticated and request.path != '/' and 'login' not in request.path %}
+            {% include 'includes/sidebar.html' %}
+        {% endif %}
+        
+        <!-- Content Area -->
+        <div class="flex-1">
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    {% if not user.is_authenticated or 'login' in request.path or request.path == '/' %}
+    <footer class="bg-army-dark border-t border-army-drab py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center items-center mb-4">
+                <svg class="h-6 w-6 text-army-gold mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+                <span class="text-lg font-semibold text-white">
+                    Bangladesh Army ATAMS
+                </span>
+            </div>
+            <p class="text-army-light">
+                Army Training & Academic Monitoring System © 2024
+            </p>
+        </div>
+    </footer>
+    {% endif %}
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

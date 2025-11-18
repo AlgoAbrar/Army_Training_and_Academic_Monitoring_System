@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
+        <p class="text-army-light mt-2">System overview and analytics</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-2xl font-bold text-army-gold">{{ analytics.total_users }}</div>
+                    <div class="text-army-light">Total Users</div>
+                </div>
+                <svg class="w-8 h-8 text-army-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-2xl font-bold text-army-gold">{{ analytics.total_soldiers }}</div>
+                    <div class="text-army-light">Soldiers</div>
+                </div>
+                <svg class="w-8 h-8 text-army-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-2xl font-bold text-army-gold">{{ analytics.total_fitness_records }}</div>
+                    <div class="text-army-light">Fitness Records</div>
+                </div>
+                <svg class="w-8 h-8 text-army-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-2xl font-bold text-army-gold">{{ analytics.total_academic_records }}</div>
+                    <div class="text-army-light">Academic Records</div>
+                </div>
+                <svg class="w-8 h-8 text-army-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- User Distribution Chart -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <h2 class="text-xl font-semibold text-white mb-4">User Distribution</h2>
+            <div class="h-64">
+                <canvas id="userDistributionChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <h2 class="text-xl font-semibold text-white mb-4">Performance Metrics</h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-army-light">Average Pushups</span>
+                        <span class="text-army-gold font-semibold">{{ analytics.avg_pushups }}</span>
+                    </div>
+                    <div class="w-full bg-army-dark rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ analytics.avg_pushups|divisibleby:2|default:50 }}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-army-light">Average Running (km)</span>
+                        <span class="text-army-gold font-semibold">{{ analytics.avg_running }}</span>
+                    </div>
+                    <div class="w-full bg-army-dark rounded-full h-2">
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: {% widthratio analytics.avg_running 5 100 %}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-army-light">Average Academic %</span>
+                        <span class="text-army-gold font-semibold">{{ analytics.avg_percentage }}%</span>
+                    </div>
+                    <div class="w-full bg-army-dark rounded-full h-2">
+                        <div class="bg-purple-500 h-2 rounded-full" style="width: {{ analytics.avg_percentage }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity and Trends -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Activity -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <h2 class="text-xl font-semibold text-white mb-4">Recent Activity (7 days)</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center p-3 bg-army-dark rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                        <span class="text-army-light">New Users</span>
+                    </div>
+                    <span class="text-army-gold font-semibold">{{ analytics.recent_activity.users }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-army-dark rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-blue-400 rounded-full"></div>
+                        <span class="text-army-light">Fitness Records</span>
+                    </div>
+                    <span class="text-army-gold font-semibold">{{ analytics.recent_activity.fitness }}</span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-army-dark rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-purple-400 rounded-full"></div>
+                        <span class="text-army-light">Academic Records</span>
+                    </div>
+                    <span class="text-army-gold font-semibold">{{ analytics.recent_activity.academics }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-1 gap-4">
+                <a href="{% url 'user_management' %}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                    <span>Manage Users</span>
+                </a>
+                <a href="{% url 'soldier_management' %}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span>View Soldiers</span>
+                </a>
+                <a href="{% url 'fitness_records' %}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <span>Fitness Records</span>
+                </a>
+                <a href="{% url 'academic_records' %}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    </svg>
+                    <span>Academic Records</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // User Distribution Chart
+    const userCtx = document.getElementById('userDistributionChart').getContext('2d');
+    
+    // Prepare data from Django context
+    const userData = {
+        labels: [],
+        data: [],
+        colors: ['#4B5320', '#D4AF37', '#6B8E23', '#8F9779']
+    };
+    
+    {% for item in analytics.users_by_role %}
+        userData.labels.push('{{ item.role|title }}');
+        userData.data.push({{ item.count }});
+    {% endfor %}
+    
+    new Chart(userCtx, {
+        type: 'doughnut',
+        data: {
+            labels: userData.labels,
+            datasets: [{
+                data: userData.data,
+                backgroundColor: userData.colors,
+                borderColor: '#1B2E1F',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#E6E6E6',
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                title: {
+                    display: false
+                }
+            }
+        }
+    });
+});
+</script>
+
+<style>
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+</style>
+{% endblock %}

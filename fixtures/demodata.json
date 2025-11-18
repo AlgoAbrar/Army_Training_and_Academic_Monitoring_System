@@ -1,0 +1,437 @@
+[
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$AbCdEfGhIjKlMnOpQrStUvWx$yZ0aB1cD2eF3gH4iJ5kL6mN7oP8qR9sT0uV=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "trainer_ahmed",
+      "first_name": "Ahmed",
+      "last_name": "Hossain",
+      "email": "ahmed.trainer@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-02T08:00:00Z",
+      "role": "trainer",
+      "phone": "+8801700000002",
+      "created_at": "2024-01-02T08:00:00Z",
+      "updated_at": "2024-01-02T08:00:00Z"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$MnOpQrStUvWxYz012345678$AbCdEfGhIjKlMnOpQrStUvWxYz0123456789a=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "trainer_rahman",
+      "first_name": "Rahman",
+      "last_name": "Khan",
+      "email": "rahman.trainer@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-02T08:30:00Z",
+      "role": "trainer",
+      "phone": "+8801700000003",
+      "created_at": "2024-01-02T08:30:00Z",
+      "updated_at": "2024-01-02T08:30:00Z"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$QrStUvWxYz0123456789Ab$CdEfGhIjKlMnOpQrStUvWxYz0123456789aB=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "teacher_fatima",
+      "first_name": "Fatima",
+      "last_name": "Begum",
+      "email": "fatima.teacher@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-02T09:00:00Z",
+      "role": "teacher",
+      "phone": "+8801700000004",
+      "created_at": "2024-01-02T09:00:00Z",
+      "updated_at": "2024-01-02T09:00:00Z"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$UvWxYz0123456789AbCdEf$GhIjKlMnOpQrStUvWxYz0123456789aBcDeF=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "soldier_rifat",
+      "first_name": "Rifat",
+      "last_name": "Ahmed",
+      "email": "rifat.soldier@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-03T07:00:00Z",
+      "role": "soldier",
+      "phone": "+8801700000005",
+      "created_at": "2024-01-03T07:00:00Z",
+      "updated_at": "2024-01-03T07:00:00Z"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$Yz0123456789AbCdEfGhIj$KlMnOpQrStUvWxYz0123456789aBcDeFgHiJ=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "soldier_karim",
+      "first_name": "Karim",
+      "last_name": "Islam",
+      "email": "karim.soldier@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-03T07:30:00Z",
+      "role": "soldier",
+      "phone": "+8801700000006",
+      "created_at": "2024-01-03T07:30:00Z",
+      "updated_at": "2024-01-03T07:30:00Z"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$23456789AbCdEfGhIjKlMn$OpQrStUvWxYz0123456789aBcDeFgHiJkLmN=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "soldier_nadia",
+      "first_name": "Nadia",
+      "last_name": "Sultana",
+      "email": "nadia.soldier@atams.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-03T08:00:00Z",
+      "role": "soldier",
+      "phone": "+8801700000007",
+      "created_at": "2024-01-03T08:00:00Z",
+      "updated_at": "2024-01-03T08:00:00Z"
+    }
+  },
+  {
+    "model": "soldiers.soldier",
+    "pk": 1,
+    "fields": {
+      "user": 5,
+      "soldier_id": "BD-001",
+      "rank": "corporal",
+      "unit": "Infantry Battalion 1",
+      "joining_date": "2023-06-15",
+      "assigned_trainer": 2,
+      "created_at": "2024-01-03T07:00:00Z",
+      "updated_at": "2024-01-03T07:00:00Z"
+    }
+  },
+  {
+    "model": "soldiers.soldier",
+    "pk": 2,
+    "fields": {
+      "user": 6,
+      "soldier_id": "BD-002",
+      "rank": "private",
+      "unit": "Infantry Battalion 1",
+      "joining_date": "2023-08-20",
+      "assigned_trainer": 2,
+      "created_at": "2024-01-03T07:30:00Z",
+      "updated_at": "2024-01-03T07:30:00Z"
+    }
+  },
+  {
+    "model": "soldiers.soldier",
+    "pk": 3,
+    "fields": {
+      "user": 7,
+      "soldier_id": "BD-003",
+      "rank": "sergeant",
+      "unit": "Special Forces Unit",
+      "joining_date": "2023-03-10",
+      "assigned_trainer": 3,
+      "created_at": "2024-01-03T08:00:00Z",
+      "updated_at": "2024-01-03T08:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 1,
+    "fields": {
+      "category": "fitness",
+      "metric_name": "pushups",
+      "min_value": 40.0,
+      "max_value": null,
+      "label": "Excellent",
+      "description": "Minimum pushups in 2 minutes for excellent rating",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 2,
+    "fields": {
+      "category": "fitness",
+      "metric_name": "running_distance",
+      "min_value": 5.0,
+      "max_value": null,
+      "label": "Excellent",
+      "description": "Minimum running distance in kilometers for excellent rating",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 3,
+    "fields": {
+      "category": "fitness",
+      "metric_name": "running_time",
+      "min_value": 0.0,
+      "max_value": 25.0,
+      "label": "Excellent",
+      "description": "Maximum running time in minutes for 5km for excellent rating",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 4,
+    "fields": {
+      "category": "fitness",
+      "metric_name": "shooting_accuracy",
+      "min_value": 85.0,
+      "max_value": null,
+      "label": "Excellent",
+      "description": "Minimum shooting accuracy percentage for excellent rating",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 5,
+    "fields": {
+      "category": "fitness",
+      "metric_name": "bmi",
+      "min_value": 18.0,
+      "max_value": 25.0,
+      "label": "Healthy",
+      "description": "Healthy BMI range",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 6,
+    "fields": {
+      "category": "academic",
+      "metric_name": "passing_marks",
+      "min_value": 60.0,
+      "max_value": null,
+      "label": "Pass",
+      "description": "Minimum marks required to pass academic tests",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "benchmarks.benchmark",
+    "pk": 7,
+    "fields": {
+      "category": "academic",
+      "metric_name": "excellent_marks",
+      "min_value": 85.0,
+      "max_value": null,
+      "label": "Excellent",
+      "description": "Minimum marks for excellent academic performance",
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "fitness.fitnessrecord",
+    "pk": 1,
+    "fields": {
+      "soldier": 1,
+      "date": "2024-01-10",
+      "pushups": 45,
+      "running_distance": 5.2,
+      "running_time": 24.5,
+      "bmi": 22.5,
+      "shooting_accuracy": 88.0,
+      "remarks": "Excellent performance in all areas",
+      "created_by": 2,
+      "created_at": "2024-01-10T10:00:00Z",
+      "updated_at": "2024-01-10T10:00:00Z"
+    }
+  },
+  {
+    "model": "fitness.fitnessrecord",
+    "pk": 2,
+    "fields": {
+      "soldier": 1,
+      "date": "2024-01-17",
+      "pushups": 48,
+      "running_distance": 5.5,
+      "running_time": 23.8,
+      "bmi": 22.3,
+      "shooting_accuracy": 90.0,
+      "remarks": "Showing consistent improvement",
+      "created_by": 2,
+      "created_at": "2024-01-17T10:00:00Z",
+      "updated_at": "2024-01-17T10:00:00Z"
+    }
+  },
+  {
+    "model": "fitness.fitnessrecord",
+    "pk": 3,
+    "fields": {
+      "soldier": 2,
+      "date": "2024-01-10",
+      "pushups": 35,
+      "running_distance": 4.5,
+      "running_time": 28.2,
+      "bmi": 24.8,
+      "shooting_accuracy": 75.0,
+      "remarks": "Needs improvement in running and shooting",
+      "created_by": 2,
+      "created_at": "2024-01-10T11:00:00Z",
+      "updated_at": "2024-01-10T11:00:00Z"
+    }
+  },
+  {
+    "model": "fitness.fitnessrecord",
+    "pk": 4,
+    "fields": {
+      "soldier": 2,
+      "date": "2024-01-17",
+      "pushups": 38,
+      "running_distance": 4.8,
+      "running_time": 27.1,
+      "bmi": 24.5,
+      "shooting_accuracy": 78.0,
+      "remarks": "Good progress, continue training",
+      "created_by": 2,
+      "created_at": "2024-01-17T11:00:00Z",
+      "updated_at": "2024-01-17T11:00:00Z"
+    }
+  },
+  {
+    "model": "fitness.fitnessrecord",
+    "pk": 5,
+    "fields": {
+      "soldier": 3,
+      "date": "2024-01-11",
+      "pushups": 52,
+      "running_distance": 6.0,
+      "running_time": 22.5,
+      "bmi": 21.8,
+      "shooting_accuracy": 92.0,
+      "remarks": "Outstanding performance, elite level",
+      "created_by": 3,
+      "created_at": "2024-01-11T09:00:00Z",
+      "updated_at": "2024-01-11T09:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 1,
+    "fields": {
+      "soldier": 1,
+      "exam_name": "Basic Military Tactics - Mid Term",
+      "subject": "military_tactics",
+      "marks": 82.0,
+      "total_marks": 100.0,
+      "remarks": "Good understanding of basic tactics",
+      "created_by": 4,
+      "created_at": "2024-01-12T10:00:00Z",
+      "updated_at": "2024-01-12T10:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 2,
+    "fields": {
+      "soldier": 1,
+      "exam_name": "Weapon Training - Final",
+      "subject": "weapon_training",
+      "marks": 88.0,
+      "total_marks": 100.0,
+      "remarks": "Excellent weapon handling skills",
+      "created_by": 4,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 3,
+    "fields": {
+      "soldier": 2,
+      "exam_name": "Basic Military Tactics - Mid Term",
+      "subject": "military_tactics",
+      "marks": 65.0,
+      "total_marks": 100.0,
+      "remarks": "Satisfactory performance, needs more study",
+      "created_by": 4,
+      "created_at": "2024-01-12T11:00:00Z",
+      "updated_at": "2024-01-12T11:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 4,
+    "fields": {
+      "soldier": 2,
+      "exam_name": "Communication Skills - Assessment",
+      "subject": "communication",
+      "marks": 72.0,
+      "total_marks": 100.0,
+      "remarks": "Good communication abilities",
+      "created_by": 4,
+      "created_at": "2024-01-16T11:00:00Z",
+      "updated_at": "2024-01-16T11:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 5,
+    "fields": {
+      "soldier": 3,
+      "exam_name": "Leadership - Advanced Test",
+      "subject": "leadership",
+      "marks": 92.0,
+      "total_marks": 100.0,
+      "remarks": "Exceptional leadership qualities demonstrated",
+      "created_by": 4,
+      "created_at": "2024-01-13T09:00:00Z",
+      "updated_at": "2024-01-13T09:00:00Z"
+    }
+  },
+  {
+    "model": "academics.academicrecord",
+    "pk": 6,
+    "fields": {
+      "soldier": 3,
+      "exam_name": "First Aid - Practical Exam",
+      "subject": "first_aid",
+      "marks": 95.0,
+      "total_marks": 100.0,
+      "remarks": "Outstanding practical first aid skills",
+      "created_by": 4,
+      "created_at": "2024-01-14T09:00:00Z",
+      "updated_at": "2024-01-14T09:00:00Z"
+    }
+  }
+]

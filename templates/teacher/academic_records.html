@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% block title %}Academic Records - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-white">Academic Records</h1>
+            <p class="text-army-light mt-2">Track and manage soldier academic performance</p>
+        </div>
+        <div class="flex space-x-4">
+            <a href="{% url 'subject_analytics' %}" class="bg-purple-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <span>Analytics</span>
+            </a>
+            <a href="{% url 'create_academic_record' %}" class="bg-army-gold text-army-dark px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors flex items-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                </svg>
+                <span>Add New Record</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats and Filters -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+        <!-- Stats Cards -->
+        <div class="lg:col-span-2 grid grid-cols-3 gap-4">
+            <div class="bg-army-olive rounded-xl p-4 border border-army-drab text-center">
+                <div class="text-2xl font-bold text-army-gold">{{ total_records }}</div>
+                <div class="text-army-light text-sm">Total Records</div>
+            </div>
+            <div class="bg-army-olive rounded-xl p-4 border border-army-drab text-center">
+                <div class="text-2xl font-bold text-green-400">{{ avg_marks }}</div>
+                <div class="text-army-light text-sm">Avg Marks</div>
+            </div>
+            <div class="bg-army-olive rounded-xl p-4 border border-army-drab text-center">
+                <div class="text-2xl font-bold text-blue-400">{{ avg_percentage }}%</div>
+                <div class="text-army-light text-sm">Avg Percentage</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="lg:col-span-3 bg-army-olive rounded-xl p-6 border border-army-drab">
+            <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <!-- Soldier Filter -->
+                <div class="md:col-span-2">
+                    <select name="soldier" class="select select-bordered w-full bg-army-dark border-army-drab text-white">
+                        <option value="">All Soldiers</option>
+                        {% for soldier in soldiers %}
+                        <option value="{{ soldier.id }}" {% if soldier_filter == soldier.id|stringformat:"s" %}selected{% endif %}>
+                            {{ soldier.user.get_full_name }} ({{ soldier.soldier_id }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Subject Filter -->
+                <div>
+                    <select name="subject" class="select select-bordered w-full bg-army-dark border-army-drab text-white">
+                        <option value="">All Subjects</option>
+                        {% for subject_value, subject_label in subjects %}
+                        <option value="{{ subject_value }}" {% if subject_filter == subject_value %}selected{% endif %}>
+                            {{ subject_label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Exam Filter -->
+                <div>
+                    <input type="text" 
+                           name="exam" 
+                           value="{{ exam_filter }}"
+                           placeholder="Exam name..."
+                           class="input input-bordered w-full bg-army-dark border-army-drab text-white">
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex space-x-2">
+                    <button type="submit" class="bg-army-green text-white px-4 py-2 rounded-lg hover:bg-army-drab transition-colors flex-1">
+                        Apply
+                    </button>
+                    <a href="{% url 'academic_records' %}" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        Clear
+                    </a>
+                </div>
+
+                <!-- Date Filters -->
+                <div class="md:col-span-2 flex space-x-2">
+                    <input type="date" 
+                           name="date_from" 
+                           value="{{ date_from }}"
+                           class="input input-bordered w-full bg-army-dark border-army-drab text-white"
+                           placeholder="From Date">
+                    <input type="date" 
+                           name="date_to" 
+                           value="{{ date_to }}"
+                           class="input input-bordered w-full bg-army-dark border-army-drab text-white"
+                           placeholder="To Date">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Top Performer -->
+    {% if top_performer %}
+    <div class="bg-gradient-to-r from-green-900 to-army-olive rounded-xl p-6 border border-green-600 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 bg-army-gold rounded-full flex items-center justify-center">
+                    <span class="text-army-dark font-bold text-xl">
+                        {{ top_performer.soldier.user.first_name|first|upper }}{{ top_performer.soldier.user.last_name|first|upper }}
+                    </span>
+                </div>
+                <div>
+                    <div class="text-white font-semibold text-lg">Top Performer</div>
+                    <div class="text-green-300">
+                        {{ top_performer.soldier.user.get_full_name }} - {{ top_performer.exam_name }}
+                    </div>
+                    <div class="text-army-light text-sm">
+                        {{ top_performer.subject|title }} - {{ top_performer.percentage|floatformat:1 }}%
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-green-300 font-bold text-3xl">{{ top_performer.grade }}</div>
+                <div class="text-white">{{ top_performer.performance_rating }}</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Academic Records Table -->
+    <div class="bg-army-olive rounded-xl border border-army-drab overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-army-green text-white">
+                        <th class="px-6 py-4 text-left">Soldier & Exam</th>
+                        <th class="px-6 py-4 text-left">Subject</th>
+                        <th class="px-6 py-4 text-left">Marks & Percentage</th>
+                        <th class="px-6 py-4 text-left">Performance</th>
+                        <th class="px-6 py-4 text-left">Recorded By</th>
+                        <th class="px-6 py-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr class="border-b border-army-drab hover:bg-army-dark transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-army-gold rounded-full flex items-center justify-center">
+                                    <span class="text-army-dark font-bold">
+                                        {{ record.soldier.user.first_name|first|upper }}{{ record.soldier.user.last_name|first|upper }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <div class="text-white font-semibold">
+                                        {{ record.soldier.user.get_full_name }}
+                                    </div>
+                                    <div class="text-army-light text-sm">
+                                        {{ record.soldier.soldier_id }} • {{ record.exam_name }}
+                                    </div>
+                                    <div class="text-army-light text-xs">
+                                        {{ record.created_at|date:"M d, Y" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-white capitalize">{{ record.get_subject_display }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="space-y-1">
+                                <div class="flex justify-between">
+                                    <span class="text-army-light text-sm">Marks:</span>
+                                    <span class="text-white font-semibold">{{ record.marks }}/{{ record.total_marks }}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-army-light text-sm">Percentage:</span>
+                                    <span class="text-army-gold font-bold">{{ record.percentage|floatformat:1 }}%</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col space-y-1">
+                                <span class="{{ record.performance_color }} text-white px-2 py-1 rounded text-xs font-semibold text-center">
+                                    {{ record.grade }} - {{ record.performance_rating }}
+                                </span>
+                                {% if record.remarks %}
+                                <div class="text-army-light text-xs truncate" title="{{ record.remarks }}">
+                                    {{ record.remarks|truncatewords:5 }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-army-light">
+                                {{ record.created_by.get_full_name }}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center space-x-2">
+                                <a href="{% url 'academic_record_detail' record.id %}" 
+                                   class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+                                   title="View Details">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="{% url 'edit_academic_record' record.id %}" 
+                                   class="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors"
+                                   title="Edit Record">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="{% url 'soldier_academic_history' record.soldier.id %}" 
+                                   class="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition-colors"
+                                   title="View History">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    </svg>
+                                </a>
+                                
+                                <button onclick="deleteAcademicRecord({{ record.id }}, '{{ record.soldier.user.get_full_name }}', '{{ record.exam_name }}')"
+                                        class="bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-colors"
+                                        title="Delete Record">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-army-light">
+                            <svg class="w-12 h-12 mx-auto text-army-light mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                            </svg>
+                            No academic records found. 
+                            {% if soldier_filter or subject_filter or exam_filter %}
+                                <a href="{% url 'academic_records' %}" class="text-army-gold hover:underline">Clear filters</a> or
+                            {% endif %}
+                            <a href="{% url 'create_academic_record' %}" class="text-army-gold hover:underline">add the first record</a>.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for AJAX actions -->
+<script>
+function deleteAcademicRecord(recordId, soldierName, examName) {
+    if (confirm(`Are you sure you want to delete academic record for "${soldierName}" (${examName})?`)) {
+        fetch(`/teacher/academics/${recordId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(data.message, 'success');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showNotification(data.error, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('An error occurred', 'error');
+        });
+    }
+}
+
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 ${
+        type === 'success' ? 'bg-green-600' : 'bg-red-600'
+    }`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}

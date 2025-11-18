@@ -1,0 +1,43 @@
+.army-gradient {
+  background: linear-gradient(135deg, #1b2e1f 0%, #283b2e 50%, #4b5320 100%);
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.military-badge {
+  background: linear-gradient(45deg, #4b5320, #6b8e23);
+  border: 2px solid #d4af37;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #283b2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5320;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b8e23;
+}

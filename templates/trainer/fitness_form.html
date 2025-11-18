@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="{% url 'fitness_records' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Back to Fitness Records</span>
+            </a>
+            <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
+            <p class="text-army-light mt-2">Record soldier physical performance metrics</p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Basic Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.soldier.id_for_label }}">
+                            Soldier *
+                        </label>
+                        {{ form.soldier }}
+                        {% if form.soldier.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.soldier.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.date.id_for_label }}">
+                            Date *
+                        </label>
+                        {{ form.date }}
+                        {% if form.date.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Physical Tests -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.pushups.id_for_label }}">
+                            Pushups (in 2 mins) *
+                        </label>
+                        {{ form.pushups }}
+                        <div class="text-army-light text-sm mt-1">Number of pushups</div>
+                        {% if form.pushups.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.pushups.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.running_distance.id_for_label }}">
+                            Running Distance (km) *
+                        </label>
+                        {{ form.running_distance }}
+                        <div class="text-army-light text-sm mt-1">Distance in kilometers</div>
+                        {% if form.running_distance.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.running_distance.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.running_time.id_for_label }}">
+                            Running Time (mins) *
+                        </label>
+                        {{ form.running_time }}
+                        <div class="text-army-light text-sm mt-1">Time in minutes</div>
+                        {% if form.running_time.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.running_time.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Body Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.bmi.id_for_label }}">
+                            Body Mass Index (BMI) *
+                        </label>
+                        {{ form.bmi }}
+                        <div class="text-army-light text-sm mt-1">Weight(kg) / Height(m)²</div>
+                        {% if form.bmi.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.bmi.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.shooting_accuracy.id_for_label }}">
+                            Shooting Accuracy (%) *
+                        </label>
+                        {{ form.shooting_accuracy }}
+                        <div class="text-army-light text-sm mt-1">Percentage accuracy</div>
+                        {% if form.shooting_accuracy.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.shooting_accuracy.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Remarks -->
+                <div>
+                    <label class="block text-white mb-2" for="{{ form.remarks.id_for_label }}">
+                        Remarks
+                    </label>
+                    {{ form.remarks }}
+                    {% if form.remarks.errors %}
+                    <div class="text-red-400 text-sm mt-1">{{ form.remarks.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Performance Preview -->
+                {% if record %}
+                <div class="bg-army-dark rounded-lg p-4 border border-army-drab">
+                    <h3 class="text-white font-semibold mb-2">Performance Evaluation</h3>
+                    {% with performance=record.evaluate_performance %}
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                        <div class="text-center">
+                            <div class="text-army-light">Pushups</div>
+                            <div class="text-white font-semibold">{{ performance.pushups }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Running</div>
+                            <div class="text-white font-semibold">{{ performance.running_distance }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Shooting</div>
+                            <div class="text-white font-semibold">{{ performance.shooting_accuracy }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Time</div>
+                            <div class="text-white font-semibold">{{ performance.running_time }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">BMI</div>
+                            <div class="text-white font-semibold">{{ performance.bmi }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Overall</div>
+                            <div class="text-white font-semibold {{ record.performance_color }} px-2 py-1 rounded">
+                                {{ performance.overall }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </div>
+                {% endif %}
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-army-drab">
+                    <a href="{% url 'fitness_records' %}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="bg-army-gold text-army-dark px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                        {{ submit_text }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Performance Standards Info -->
+        <div class="mt-6 bg-blue-900 border border-blue-700 rounded-xl p-4">
+            <h3 class="text-white font-semibold mb-3">Performance Standards</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm text-blue-200">
+                <div>
+                    <strong>Pushups:</strong> 
+                    <br>Excellent: ≥40 | Good: 30-39 | Average: 20-29
+                </div>
+                <div>
+                    <strong>Running (5km):</strong>
+                    <br>Excellent: ≤25min | Good: 26-30min | Average: 31-35min
+                </div>
+                <div>
+                    <strong>Shooting:</strong>
+                    <br>Excellent: ≥85% | Good: 75-84% | Average: 60-74%
+                </div>
+                <div>
+                    <strong>BMI:</strong>
+                    <br>Healthy: 18.5-24.9 | Underweight: &lt;18.5 | Overweight: &gt;24.9
+                </div>
+                <div>
+                    <strong>Running Distance:</strong>
+                    <br>Excellent: ≥5.0km | Good: 4.0-4.9km | Average: 3.0-3.9km
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.input, .select, .textarea {
+    background-color: #283B2E !important;
+    border-color: #6B8E23 !important;
+    color: #E6E6E6 !important;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+    border-color: #D4AF37 !important;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+}
+</style>
+{% endblock %}

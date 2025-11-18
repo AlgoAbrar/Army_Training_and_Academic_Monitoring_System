@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="{% url 'academic_records' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Back to Academic Records</span>
+            </a>
+            <h1 class="text-3xl font-bold text-white">{{ title }}</h1>
+            <p class="text-army-light mt-2">Record soldier academic performance</p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Basic Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.soldier.id_for_label }}">
+                            Soldier *
+                        </label>
+                        {{ form.soldier }}
+                        {% if form.soldier.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.soldier.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.exam_name.id_for_label }}">
+                            Exam Name *
+                        </label>
+                        {{ form.exam_name }}
+                        <div class="text-army-light text-sm mt-1">e.g., Mid-Term, Final Exam, Practical Test</div>
+                        {% if form.exam_name.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.exam_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Subject and Marks -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.subject.id_for_label }}">
+                            Subject *
+                        </label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.subject.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.marks.id_for_label }}">
+                            Marks Obtained *
+                        </label>
+                        {{ form.marks }}
+                        {% if form.marks.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.marks.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white mb-2" for="{{ form.total_marks.id_for_label }}">
+                            Total Marks *
+                        </label>
+                        {{ form.total_marks }}
+                        <div class="text-army-light text-sm mt-1">Default: 100</div>
+                        {% if form.total_marks.errors %}
+                        <div class="text-red-400 text-sm mt-1">{{ form.total_marks.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Percentage Preview -->
+                {% if record %}
+                <div class="bg-army-dark rounded-lg p-4 border border-army-drab">
+                    <h3 class="text-white font-semibold mb-2">Performance Evaluation</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div class="text-center">
+                            <div class="text-army-light">Percentage</div>
+                            <div class="text-army-gold font-bold text-xl">{{ record.percentage|floatformat:1 }}%</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Grade</div>
+                            <div class="text-white font-semibold">{{ record.grade }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Rating</div>
+                            <div class="text-white font-semibold">{{ record.performance_rating }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-army-light">Status</div>
+                            <div class="text-white font-semibold {{ record.performance_color }} px-2 py-1 rounded">
+                                {{ record.performance_rating }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Remarks -->
+                <div>
+                    <label class="block text-white mb-2" for="{{ form.remarks.id_for_label }}">
+                        Remarks & Comments
+                    </label>
+                    {{ form.remarks }}
+                    <div class="text-army-light text-sm mt-1">Additional comments about performance</div>
+                    {% if form.remarks.errors %}
+                    <div class="text-red-400 text-sm mt-1">{{ form.remarks.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-4 pt-6 border-t border-army-drab">
+                    <a href="{% url 'academic_records' %}" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" class="bg-army-gold text-army-dark px-6 py-3 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                        {{ submit_text }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Grading System Info -->
+        <div class="mt-6 bg-blue-900 border border-blue-700 rounded-xl p-4">
+            <h3 class="text-white font-semibold mb-3">Grading System</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-blue-200">
+                <div class="text-center p-3 bg-blue-800 rounded-lg">
+                    <div class="text-green-300 font-bold text-lg">A+</div>
+                    <div>85% - 100%</div>
+                    <div class="text-green-400">Excellent</div>
+                </div>
+                <div class="text-center p-3 bg-blue-800 rounded-lg">
+                    <div class="text-blue-300 font-bold text-lg">A</div>
+                    <div>75% - 84%</div>
+                    <div class="text-blue-400">Very Good</div>
+                </div>
+                <div class="text-center p-3 bg-blue-800 rounded-lg">
+                    <div class="text-yellow-300 font-bold text-lg">B</div>
+                    <div>65% - 74%</div>
+                    <div class="text-yellow-400">Good</div>
+                </div>
+                <div class="text-center p-3 bg-blue-800 rounded-lg">
+                    <div class="text-orange-300 font-bold text-lg">C</div>
+                    <div>50% - 64%</div>
+                    <div class="text-orange-400">Satisfactory</div>
+                </div>
+                <div class="text-center p-3 bg-blue-800 rounded-lg md:col-span-2 lg:col-span-4">
+                    <div class="text-red-300 font-bold text-lg">F</div>
+                    <div>Below 50%</div>
+                    <div class="text-red-400">Needs Improvement</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.input, .select, .textarea {
+    background-color: #283B2E !important;
+    border-color: #6B8E23 !important;
+    color: #E6E6E6 !important;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+    border-color: #D4AF37 !important;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Auto-calculate percentage */
+document.addEventListener('DOMContentLoaded', function() {
+    const marksInput = document.querySelector('#id_marks');
+    const totalMarksInput = document.querySelector('#id_total_marks');
+    
+    function calculatePercentage() {
+        const marks = parseFloat(marksInput.value) || 0;
+        const totalMarks = parseFloat(totalMarksInput.value) || 100;
+        
+        if (marks > 0 && totalMarks > 0) {
+            const percentage = (marks / totalMarks) * 100;
+            // You can display this in a preview element if needed
+        }
+    }
+    
+    marksInput.addEventListener('input', calculatePercentage);
+    totalMarksInput.addEventListener('input', calculatePercentage);
+});
+</style>
+{% endblock %}

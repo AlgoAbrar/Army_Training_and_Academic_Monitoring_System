@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% comment %} 
+{% block title %}{{ soldier.user.get_full_name }} - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'soldier_management' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Back to Soldier Management</span>
+        </a>
+        
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold text-white">{{ soldier.user.get_full_name }}</h1>
+                <p class="text-army-light mt-2">Soldier ID: {{ soldier.soldier_id }}</p>
+            </div>
+            <a href="{% url 'edit_soldier' soldier.id %}" class="bg-army-gold text-army-dark px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                Edit Soldier
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Personal Info -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Personal Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Personal Information</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-army-light text-sm">Full Name</div>
+                        <div class="text-white">{{ soldier.user.get_full_name }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Email</div>
+                        <div class="text-white">{{ soldier.user.email }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Phone</div>
+                        <div class="text-white">{{ soldier.user.phone|default:"Not provided" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Username</div>
+                        <div class="text-white font-mono">{{ soldier.user.username }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Military Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Military Information</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-army-light text-sm">Soldier ID</div>
+                        <div class="text-white font-mono">{{ soldier.soldier_id }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Rank</div>
+                        <div class="text-army-gold capitalize">{{ soldier.rank }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Unit</div>
+                        <div class="text-white">{{ soldier.unit }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Joining Date</div>
+                        <div class="text-white">{{ soldier.joining_date|date:"F d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Service Duration</div>
+                        <div class="text-white">
+                            {% now "Y-m-d" as current_date %}
+                            {{ soldier.joining_date|timesince:current_date }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainer Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Assigned Trainer</h2>
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-army-gold rounded-full flex items-center justify-center">
+                        <span class="text-army-dark font-bold">
+                            {{ soldier.assigned_trainer.first_name|first|upper }}{{ soldier.assigned_trainer.last_name|first|upper }}
+                        </span>
+                    </div>
+                    <div>
+                        <div class="text-white font-semibold">
+                            {{ soldier.assigned_trainer.get_full_name }}
+                        </div>
+                        <div class="text-army-light text-sm">
+                            {{ soldier.assigned_trainer.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Performance -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Recent Fitness Records -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-white">Recent Fitness Records</h2>
+                    <a href="#" class="text-army-gold hover:underline text-sm">View All</a>
+                </div>
+                
+                {% if fitness_records %}
+                <div class="space-y-3">
+                    {% for record in fitness_records %}
+                    <div class="bg-army-dark rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-white font-semibold">{{ record.date }}</span>
+                            <span class="bg-green-600 text-white px-2 py-1 rounded text-xs">Excellent</span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div>
+                                <div class="text-army-light text-sm">Pushups</div>
+                                <div class="text-army-gold font-bold">{{ record.pushups }}</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">Running</div>
+                                <div class="text-army-gold font-bold">{{ record.running_distance }}km</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">BMI</div>
+                                <div class="text-army-gold font-bold">{{ record.bmi }}</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">Shooting</div>
+                                <div class="text-army-gold font-bold">{{ record.shooting_accuracy }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-army-light">
+                    <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    No fitness records found.
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Academic Records -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-white">Recent Academic Records</h2>
+                    <a href="#" class="text-army-gold hover:underline text-sm">View All</a>
+                </div>
+                
+                {% if academic_records %}
+                <div class="space-y-3">
+                    {% for record in academic_records %}
+                    <div class="bg-army-dark rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="text-white font-semibold">{{ record.exam_name }}</div>
+                                <div class="text-army-light text-sm capitalize">{{ record.subject }}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-army-gold font-bold text-xl">{{ record.percentage|floatformat:1 }}%</div>
+                                <div class="text-army-light text-sm">{{ record.marks }}/{{ record.total_marks }}</div>
+                            </div>
+                        </div>
+                        {% if record.remarks %}
+                        <div class="text-army-light text-sm mt-2">{{ record.remarks }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-army-light">
+                    <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    </svg>
+                    No academic records found.
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                        Add Fitness Record
+                    </a>
+                    <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                        Add Academic Record
+                    </a>
+                    <a href="#" class="bg-blue-600 text-white p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                        View Full Report
+                    </a>
+                    <a href="#" class="bg-purple-600 text-white p-4 rounded-lg text-center hover:bg-purple-700 transition-colors">
+                        Performance Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+{% block title %}{{ soldier.user.get_full_name }} - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'soldier_management' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Back to Soldier Management</span>
+        </a>
+        
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold text-white">{{ soldier.user.get_full_name }}</h1>
+                <p class="text-army-light mt-2">Soldier ID: {{ soldier.soldier_id }}</p>
+            </div>
+            <a href="{% url 'edit_soldier' soldier.id %}" class="bg-army-gold text-army-dark px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                Edit Soldier
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Personal Info -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Personal Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Personal Information</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-army-light text-sm">Full Name</div>
+                        <div class="text-white">{{ soldier.user.get_full_name }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Email</div>
+                        <div class="text-white">{{ soldier.user.email }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Phone</div>
+                        <div class="text-white">{{ soldier.user.phone|default:"Not provided" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Username</div>
+                        <div class="text-white font-mono">{{ soldier.user.username }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Military Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Military Information</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-army-light text-sm">Soldier ID</div>
+                        <div class="text-white font-mono">{{ soldier.soldier_id }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Rank</div>
+                        <div class="text-army-gold capitalize">{{ soldier.rank }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Unit</div>
+                        <div class="text-white">{{ soldier.unit }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Joining Date</div>
+                        <div class="text-white">{{ soldier.joining_date|date:"F d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Service Duration</div>
+                        <div class="text-white">
+                            {% now "Y-m-d" as current_date %}
+                            {% with joining_date=soldier.joining_date|date:"Y-m-d" %}
+                                {{ joining_date }} until now
+                            {% endwith %}
+                            <!-- Simple duration calculation -->
+                            {% with years=current_date|slice:":4"|add:0 joining_year=soldier.joining_date.year %}
+                                5 years
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainer Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Assigned Trainer</h2>
+                {% if soldier.assigned_trainer %}
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-army-gold rounded-full flex items-center justify-center">
+                        <span class="text-army-dark font-bold">
+                            {{ soldier.assigned_trainer.first_name|first|upper }}{{ soldier.assigned_trainer.last_name|first|upper }}
+                        </span>
+                    </div>
+                    <div>
+                        <div class="text-white font-semibold">
+                            {{ soldier.assigned_trainer.get_full_name }}
+                        </div>
+                        <div class="text-army-light text-sm">
+                            {{ soldier.assigned_trainer.email }}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center text-army-light py-4">
+                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                    </svg>
+                    No trainer assigned
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Column - Performance -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Recent Fitness Records -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-white">Recent Fitness Records</h2>
+                    <a href="{% url 'soldier_fitness_history' soldier.id %}" class="text-army-gold hover:underline text-sm">View All</a>
+                </div>
+                
+                {% if fitness_records %}
+                <div class="space-y-3">
+                    {% for record in fitness_records %}
+                    <div class="bg-army-dark rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-white font-semibold">{{ record.date }}</span>
+                            <span class="{% if record.performance_color %}{{ record.performance_color }}{% else %}bg-green-600{% endif %} text-white px-2 py-1 rounded text-xs">
+                                {% with performance=record.evaluate_performance %}
+                                    {{ performance.overall }}
+                                {% endwith %}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div>
+                                <div class="text-army-light text-sm">Pushups</div>
+                                <div class="text-army-gold font-bold">{{ record.pushups }}</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">Running</div>
+                                <div class="text-army-gold font-bold">{{ record.running_distance }}km</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">BMI</div>
+                                <div class="text-army-gold font-bold">{{ record.bmi }}</div>
+                            </div>
+                            <div>
+                                <div class="text-army-light text-sm">Shooting</div>
+                                <div class="text-army-gold font-bold">{{ record.shooting_accuracy }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-army-light">
+                    <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    No fitness records found.
+                    <a href="{% url 'create_fitness_record' %}" class="text-army-gold hover:underline block mt-2">Add first fitness record</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Academic Records -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-white">Recent Academic Records</h2>
+                    <a href="#" class="text-army-gold hover:underline text-sm">View All</a>
+                </div>
+                
+                {% if academic_records %}
+                <div class="space-y-3">
+                    {% for record in academic_records %}
+                    <div class="bg-army-dark rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <div class="text-white font-semibold">{{ record.exam_name }}</div>
+                                <div class="text-army-light text-sm capitalize">{{ record.subject }}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-army-gold font-bold text-xl">
+                                    {% widthratio record.marks record.total_marks 100 as percentage %}
+                                    {{ percentage }}%
+                                </div>
+                                <div class="text-army-light text-sm">{{ record.marks }}/{{ record.total_marks }}</div>
+                            </div>
+                        </div>
+                        {% if record.remarks %}
+                        <div class="text-army-light text-sm mt-2">{{ record.remarks }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-army-light">
+                    <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    </svg>
+                    No academic records found.
+                    <a href="#" class="text-army-gold hover:underline block mt-2">Add first academic record</a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="{% url 'create_fitness_record' %}?soldier={{ soldier.id }}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                        Add Fitness Record
+                    </a>
+                    <a href="#" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                        Add Academic Record
+                    </a>
+                    <a href="{% url 'soldier_fitness_history' soldier.id %}" class="bg-blue-600 text-white p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                        View Fitness History
+                    </a>
+                    <a href="#" class="bg-purple-600 text-white p-4 rounded-lg text-center hover:bg-purple-700 transition-colors">
+                        Performance Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add custom calculation for service duration -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calculate service duration
+    const joiningDate = new Date('{{ soldier.joining_date|date:"Y-m-d" }}');
+    const currentDate = new Date();
+    
+    const years = currentDate.getFullYear() - joiningDate.getFullYear();
+    const months = currentDate.getMonth() - joiningDate.getMonth();
+    
+    let totalMonths = years * 12 + months;
+    if (currentDate.getDate() < joiningDate.getDate()) {
+        totalMonths--;
+    }
+    
+    const displayYears = Math.floor(totalMonths / 12);
+    const displayMonths = totalMonths % 12;
+    
+    // Update the service duration display
+    const durationElement = document.querySelector('.text-white:contains("Service Duration")').nextElementSibling;
+    if (durationElement) {
+        if (displayYears > 0) {
+            durationElement.textContent = `${displayYears} year${displayYears > 1 ? 's' : ''} ${displayMonths > 0 ? `${displayMonths} month${displayMonths > 1 ? 's' : ''}` : ''}`;
+        } else {
+            durationElement.textContent = `${displayMonths} month${displayMonths > 1 ? 's' : ''}`;
+        }
+    }
+});
+</script>
+{% endblock %}

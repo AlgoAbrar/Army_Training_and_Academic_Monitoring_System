@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ record.soldier.user.get_full_name }} - Academic Record - ATAMS{% endblock %}
+
+{% block content %}
+<div class="p-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'academic_records' %}" class="text-army-gold hover:underline flex items-center space-x-2 mb-4">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span>Back to Academic Records</span>
+        </a>
+        
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Academic Record</h1>
+                <p class="text-army-light mt-2">{{ record.exam_name }} - {{ record.get_subject_display }}</p>
+            </div>
+            <div class="flex space-x-2">
+                <a href="{% url 'edit_academic_record' record.id %}" class="bg-army-gold text-army-dark px-4 py-2 rounded-lg font-semibold hover:bg-yellow-600 transition-colors">
+                    Edit Record
+                </a>
+                <a href="{% url 'soldier_academic_history' record.soldier.id %}" class="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                    View History
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Student Info -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Student Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Student Information</h2>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-16 h-16 bg-army-gold rounded-full flex items-center justify-center">
+                        <span class="text-army-dark font-bold text-lg">
+                            {{ record.soldier.user.first_name|first|upper }}{{ record.soldier.user.last_name|first|upper }}
+                        </span>
+                    </div>
+                    <div>
+                        <div class="text-white font-semibold text-lg">{{ record.soldier.user.get_full_name }}</div>
+                        <div class="text-army-light">ID: {{ record.soldier.soldier_id }}</div>
+                        <div class="text-army-light text-sm">{{ record.soldier.unit }}</div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-army-light">Rank:</span>
+                        <span class="text-white capitalize">{{ record.soldier.rank }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-army-light">Email:</span>
+                        <span class="text-white">{{ record.soldier.user.email }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam Details Card -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Exam Details</h2>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-army-light text-sm">Exam Name</div>
+                        <div class="text-white font-semibold">{{ record.exam_name }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Subject</div>
+                        <div class="text-white capitalize">{{ record.get_subject_display }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Date Recorded</div>
+                        <div class="text-white">{{ record.created_at|date:"F d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-army-light text-sm">Recorded By</div>
+                        <div class="text-white">{{ record.created_by.get_full_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Performance -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Performance Summary -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-6">Performance Summary</h2>
+                
+                <!-- Main Performance Card -->
+                <div class="bg-army-dark rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <div class="text-army-light text-sm">Marks Obtained</div>
+                            <div class="text-white font-bold text-3xl">{{ record.marks }}</div>
+                            <div class="text-army-light text-sm">out of {{ record.total_marks }}</div>
+                        </div>
+                        <div>
+                            <div class="text-army-light text-sm">Percentage</div>
+                            <div class="text-army-gold font-bold text-4xl">{{ record.percentage|floatformat:1 }}%</div>
+                        </div>
+                        <div>
+                            <div class="text-army-light text-sm">Grade</div>
+                            <div class="text-white font-bold text-3xl">{{ record.grade }}</div>
+                            <div class="text-army-light text-sm">{{ record.performance_rating }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Rating -->
+                <div class="text-center">
+                    <span class="{{ record.performance_color }} text-white px-6 py-3 rounded-full text-lg font-semibold inline-block">
+                        {{ record.performance_rating }} Performance
+                    </span>
+                    <p class="text-army-light mt-2">{{ performance.description }}</p>
+                </div>
+            </div>
+
+            <!-- Remarks -->
+            {% if record.remarks %}
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Remarks & Comments</h2>
+                <div class="bg-army-dark rounded-lg p-4">
+                    <p class="text-army-light leading-relaxed">{{ record.remarks }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quick Actions -->
+            <div class="bg-army-olive rounded-xl p-6 border border-army-drab">
+                <h2 class="text-xl font-semibold text-white mb-4">Quick Actions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="{% url 'edit_academic_record' record.id %}" class="bg-green-600 text-white p-4 rounded-lg text-center hover:bg-green-700 transition-colors">
+                        Edit This Record
+                    </a>
+                    <a href="{% url 'soldier_academic_history' record.soldier.id %}" class="bg-purple-600 text-white p-4 rounded-lg text-center hover:bg-purple-700 transition-colors">
+                        View Student History
+                    </a>
+                    <a href="{% url 'create_academic_record' %}?soldier={{ record.soldier.id }}" class="bg-blue-600 text-white p-4 rounded-lg text-center hover:bg-blue-700 transition-colors">
+                        Add New Record
+                    </a>
+                    <a href="{% url 'academic_records' %}?soldier={{ record.soldier.id }}" class="bg-army-green text-white p-4 rounded-lg text-center hover:bg-army-drab transition-colors">
+                        All Student Records
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

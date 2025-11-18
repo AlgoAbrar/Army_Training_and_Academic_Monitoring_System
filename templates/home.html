@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Bangladesh Army ATAMS{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="army-gradient">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                Army Training & Academic Monitoring System
+            </h1>
+            <p class="text-xl md:text-2xl text-army-gold mb-8 max-w-3xl mx-auto">
+                Digitizing soldier performance tracking for the Bangladesh Army
+            </p>
+            
+            {% if not user.is_authenticated %}
+            <div class="space-x-4">
+                <a href="{% url 'login' %}" class="bg-army-gold text-army-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-600 transition-colors inline-block">
+                    Get Started
+                </a>
+                <a href="#features" class="border border-army-gold text-army-gold px-8 py-4 rounded-lg font-bold text-lg hover:bg-army-gold hover:text-army-dark transition-colors inline-block">
+                    Learn More
+                </a>
+            </div>
+            {% else %}
+            <a href="{% url 'dashboard' %}" class="bg-army-gold text-army-dark px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-600 transition-colors inline-block">
+                Go to Dashboard
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div id="features" class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            Comprehensive Soldier Management
+        </h2>
+        <p class="text-xl text-army-light max-w-3xl mx-auto">
+            Track fitness progress, academic performance, and overall readiness in one integrated platform.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Feature 1 -->
+        <div class="bg-army-olive rounded-xl p-6 card-hover border border-army-drab">
+            <div class="text-army-gold mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2 text-center">
+                Fitness Tracking
+            </h3>
+            <p class="text-army-light text-center">
+                Monitor physical performance, progress, and combat readiness with detailed analytics.
+            </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="bg-army-olive rounded-xl p-6 card-hover border border-army-drab">
+            <div class="text-army-gold mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2 text-center">
+                Academic Monitoring
+            </h3>
+            <p class="text-army-light text-center">
+                Track educational progress and skill development across various military subjects.
+            </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-army-olive rounded-xl p-6 card-hover border border-army-drab">
+            <div class="text-army-gold mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2 text-center">
+                Performance Analytics
+            </h3>
+            <p class="text-army-light text-center">
+                Advanced analytics for performance evaluation and improvement tracking.
+            </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="bg-army-olive rounded-xl p-6 card-hover border border-army-drab">
+            <div class="text-army-gold mb-4">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2 text-center">
+                Achievement System
+            </h3>
+            <p class="text-army-light text-center">
+                Recognize excellence with badges, awards, and performance-based promotions.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="bg-army-olive py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-3xl font-bold text-army-gold">1000+</div>
+                <div class="text-army-light">Active Soldiers</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-army-gold">50+</div>
+                <div class="text-army-light">Trainers</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-army-gold">25+</div>
+                <div class="text-army-light">Training Programs</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-army-gold">99%</div>
+                <div class="text-army-light">Success Rate</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
